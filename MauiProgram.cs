@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using TDMDUAPP.Domain.Services;
+
 
 namespace TDMDUAPP
 {
@@ -18,6 +20,9 @@ namespace TDMDUAPP
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+
+            builder.Services.AddSingleton<ViewModel>();
+            builder.Services.AddSingleton<MainPage>();
 
             return builder.Build();
         }

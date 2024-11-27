@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TDMDUAPP.MainPage">
+             x:Class="TDMDUAPP.MainPage"
+             xmlns:viewmodel = "clr-namespace:TDMDUAPP.Domain.Services"
+             x:DataType="viewmodel:ViewModel">
 
     <ScrollView>
         <VerticalStackLayout
@@ -25,11 +27,17 @@
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
 
             <Button
-                x:Name="CounterBtn"
-                Text="Click me" 
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
+                x:Name="BTNsendApiLink"
+                Text="Send Link" 
+                SemanticProperties.Hint="Sends first link to bridge"
+                Command="{Binding SendApiLinkCommand}"
                 HorizontalOptions="Fill" />
+            <Button
+                x:Name="BTNGetLights"
+                Text="get light info"
+                Command="{Binding GetLightsCommand}"
+                HorizontalOptions="Fill"/>
+
         </VerticalStackLayout>
     </ScrollView>
 
