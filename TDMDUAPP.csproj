@@ -62,4 +62,11 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Domain.Services\" />
+	  <Folder Include="Application.Services\" />
+	  <Folder Include="Tests\" />
+	  <Folder Include="UserInterface\" />
+	</ItemGroup>
+
 </Project>
