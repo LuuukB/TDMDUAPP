@@ -10,7 +10,12 @@ namespace TDMDUAPP.Domain.Model
     {
         Task SendApiLinkAsync();
 
-        Task GetAllLightIDsAsync();
+        Task<List<string>> GetAllLightIDsAsync();
+
+        Task TurnLightOnOffAsync(string lightID, bool isOn);
+        Task SetLighColorAsync(string lightId, int hue, int saturation, int brightness);
+
+        Task GetLightInfoAsync(string lightId);
 
 
 

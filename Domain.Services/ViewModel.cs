@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Linq;
 using TDMDUAPP.infrastucture;
 
 
@@ -8,8 +7,16 @@ namespace TDMDUAPP.Domain.Services
 {
     public partial class ViewModel : ObservableObject
     {
-        private static IPreferences _Preferences;//todo maak hier een constructor en daar zet je de prefrence in want dan set je het. stupid 
-        private BridgeConnector BridgeConnector = new BridgeConnector(_Preferences);
+        private BridgeConnector BridgeConnector;
+       
+        public ViewModel(IPreferences preferences) 
+        { 
+            BridgeConnector = new BridgeConnector(preferences);
+        }
+        [ObservableProperty]
+        private string _lightId;
+        [ObservableProperty]
+        private bool _isLightOn;
         [RelayCommand]
         public async Task SendApiLink() {
             await BridgeConnector.SendApiLinkAsync();
@@ -18,7 +25,9 @@ namespace TDMDUAPP.Domain.Services
         public async Task GetLights() {
             await BridgeConnector.GetAllLightIDsAsync();
         }
-        
-
+        [RelayCommand]
+        public async Task TurnLightOnOffAsync() {
+            await BridgeConnector.TurnLightOnOffAsync(LightId, IsLightOn);
+        }
     }
 }

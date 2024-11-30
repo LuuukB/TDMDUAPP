@@ -22,16 +22,24 @@ namespace TDMDUAPP.infrastucture
         public async Task SendApiLinkAsync() 
         {
             Debug.WriteLine("Send LINK");
-            var response = await _httpClient.PostAsJsonAsync("", new
+            try
             {
-                devicetype = "my_hue_app#iphone peter"
-            });
-            
-            response.EnsureSuccessStatusCode(); 
-            string json = await response.Content.ReadAsStringAsync();
-            Debug.WriteLine(json);
+                var response = await _httpClient.PostAsJsonAsync("", new
+                {
+                    devicetype = "my_hue_app#iphone peter"
+                });
+                response.EnsureSuccessStatusCode();
+                string json = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine(json);
 
-            ExtractUserName(json);
+                ExtractUserName(json);
+            }
+            catch (Exception ex) {
+                Debug.WriteLine("de server staat uit");
+            
+            }
+
+
         }
 
         public void ExtractUserName(string json)
@@ -47,21 +55,42 @@ namespace TDMDUAPP.infrastucture
             _preferences.Set("username",userName);
         }
 
-        
 
-        public void TurnLightOn() 
+        public async Task<List<string>> GetAllLightIDsAsync()
         {
-            
-        
+            Debug.WriteLine("GETTING LIGHTSSS");
+            var response = await _httpClient.GetAsync($"{_preferences.Get("username", string.Empty)}/lights");
+            response.EnsureSuccessStatusCode();
+
+            string json = await response.Content.ReadAsStringAsync();
+            var lights = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
+            var lightIds = lights.Keys.ToList();
+            foreach (var lightId in lightIds) { 
+                Debug.WriteLine($"LightIDDDDSSS: {lightId}");
+            }
+            return lightIds;
+
         }
 
-        public async Task GetAllLightIDsAsync()
+        public async Task TurnLightOnOffAsync(string lightID, bool isOn)
         {
-            //var response = await _httpClient.GetStringAsync($"/{}/lights");
+            var response = await _httpClient.PutAsJsonAsync(
+                $"{_preferences.Get("username", string.Empty)}/lights/{lightID}/state",
+                new { on = isOn }
+                );
+            response.EnsureSuccessStatusCode();
+            string json = await response.Content.ReadAsStringAsync();
+            Debug.WriteLine(json);
+        }
 
-            //Debug.WriteLine(response);
+        public Task SetLighColorAsync(string lightId, int hue, int saturation, int brightness)
+        {
+            throw new NotImplementedException();
+        }
 
-
+        public Task GetLightInfoAsync(string lightId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

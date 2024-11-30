@@ -37,6 +37,21 @@
                 Text="get light info"
                 Command="{Binding GetLightsCommand}"
                 HorizontalOptions="Fill"/>
+            <Entry
+                x:Name="LightIdEntry"
+                Placeholder="Type Light ID"
+                Keyboard="Numeric" 
+                Text="{Binding LightId}"
+                HorizontalOptions="Fill"/>
+            <Switch
+                x:Name="LightSwitch"
+                IsToggled="{Binding IsLightOn}"
+                HorizontalOptions="Fill" />
+            <Button
+                x:Name="BTNGetSpecificLight"
+                Text="Get Specific Light Info"
+                Command="{Binding TurnLightOnOffCommand}" 
+                HorizontalOptions="Fill" />
 
         </VerticalStackLayout>
     </ScrollView>

@@ -8,13 +8,13 @@ namespace TDMDUAPP.Domain.Model
 {
     internal class Lamp
     {
-        private int Hue;
-        private string color;
-        private int LampId;
+        public string? LampId { get; set; }
+        public string? Name { get; set; }
+        public bool IsOn { get; set; }
+        public int Brightness { get; set; }
+        public string? Color { get; set; }
 
-        public Lamp(int Lampid) { 
-        this.LampId = Lampid;
-        }
+       
 
 
        
