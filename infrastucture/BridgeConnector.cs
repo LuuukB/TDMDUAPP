@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using TDMDUAPP.Domain.Model;
 
 namespace TDMDUAPP.infrastucture
@@ -13,11 +12,11 @@ namespace TDMDUAPP.infrastucture
     public class BridgeConnector : IBridgeConnectorHueLights
     {
         private static readonly HttpClient _httpClient = new() { BaseAddress = new Uri("http://localhost/api/") };//als je met emulator wil connencten gebruik deze anders https://192.168.1.179/api
-
-        private static string? UserName { get; set; }//todo make set private
-        public BridgeConnector() 
+        private IPreferences _preferences;
+        //private static string? UserName { get; set; }//todo make set private
+        public BridgeConnector(IPreferences preferences) 
         {
-
+            _preferences = preferences;
         }
 
         public async Task SendApiLinkAsync() 
@@ -29,31 +28,26 @@ namespace TDMDUAPP.infrastucture
             });
             
             response.EnsureSuccessStatusCode(); 
-            Debug.WriteLine(await response.Content.ReadAsStringAsync());
             string json = await response.Content.ReadAsStringAsync();
+            Debug.WriteLine(json);
 
             ExtractUserName(json);
-
-           
         }
 
         public void ExtractUserName(string json)
         {
-            //using JsonDocument jsonDocument = JsonDocument.Parse(json);
-            //JsonElement root = jsonDocument.RootElement;
-            //UserName = root.GetProperty("succes").GetProperty("username").GetString();
-
-            //using JsonDocument jsonDocument = JsonDocument.Parse(json);
-            //JsonElement root = jsonDocument.RootElement;
-
-            
-            //if (root.TryGetProperty("succes", out JsonElement succesElement))
-            //{
-            //    string userName = succesElement.GetProperty("username").GetString();
-            //    Console.WriteLine(userName); 
-            //}
-
+            JsonDocument jsonDocument = JsonDocument.Parse(json);
+            var rootArray = jsonDocument.RootElement;
+            var rootObject = rootArray[0];
+            var successElement = rootObject.GetProperty("success");
+            var usernameProperty = successElement.GetProperty("username");
+            var userName = usernameProperty.GetString();
+            //UserName = usernameProperty.GetString();
+            Debug.WriteLine(userName);
+            _preferences.Set("username",userName);
         }
+
+        
 
         public void TurnLightOn() 
         {
@@ -63,9 +57,9 @@ namespace TDMDUAPP.infrastucture
 
         public async Task GetAllLightIDsAsync()
         {
-            var response = await _httpClient.GetStringAsync($"/{UserName}/lights");
+            //var response = await _httpClient.GetStringAsync($"/{}/lights");
 
-            Debug.WriteLine(response);
+            //Debug.WriteLine(response);
 
 
         }

@@ -24,6 +24,8 @@ namespace TDMDUAPP
             builder.Services.AddSingleton<ViewModel>();
             builder.Services.AddSingleton<MainPage>();
 
+            builder.Services.AddSingleton<IPreferences>(p => Preferences.Default);
+
             return builder.Build();
         }
     }
