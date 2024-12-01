@@ -13,7 +13,7 @@ namespace TDMDUAPP.infrastucture
     {
         private static readonly HttpClient _httpClient = new() { BaseAddress = new Uri("http://localhost/api/") };//als je met emulator wil connencten gebruik deze anders https://192.168.1.179/api
         private IPreferences _preferences;
-        //private static string? UserName { get; set; }//todo make set private
+
         public BridgeConnector(IPreferences preferences) 
         {
             _preferences = preferences;
@@ -65,7 +65,7 @@ namespace TDMDUAPP.infrastucture
             string json = await response.Content.ReadAsStringAsync();
             var lights = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
             var lightIds = lights.Keys.ToList();
-            foreach (var lightId in lightIds) { 
+            foreach (var lightId in lights) { 
                 Debug.WriteLine($"LightIDDDDSSS: {lightId}");
             }
             return lightIds;
@@ -83,14 +83,34 @@ namespace TDMDUAPP.infrastucture
             Debug.WriteLine(json);
         }
 
-        public Task SetLighColorAsync(string lightId, int hue, int saturation, int brightness)
+        public async Task SetLighColorAsync(string lightId, int hueOrigen, int saturation, int brightness, bool isOn)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PutAsJsonAsync(
+              $"{_preferences.Get("username", string.Empty)}/lights/{lightId}/state",
+              new
+              {
+                  on = isOn,
+                  sat = saturation,
+                  bri = brightness,
+                  hue = hueOrigen,
+
+              }
+              );
+            response.EnsureSuccessStatusCode();
+            string json = await response.Content.ReadAsStringAsync();
+            Debug.WriteLine(json);
         }
 
-        public Task GetLightInfoAsync(string lightId)
+        public async Task<string> GetLightInfoSpecificAsync(string lightId)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.GetAsync(
+              $"{_preferences.Get("username", string.Empty)}/lights/{lightId}");
+
+            response.EnsureSuccessStatusCode();
+            string json = await response.Content.ReadAsStringAsync();
+            Debug.WriteLine(json);
+            return json;
+            
         }
     }
 }

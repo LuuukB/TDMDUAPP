@@ -13,9 +13,9 @@ namespace TDMDUAPP.Domain.Model
         Task<List<string>> GetAllLightIDsAsync();
 
         Task TurnLightOnOffAsync(string lightID, bool isOn);
-        Task SetLighColorAsync(string lightId, int hue, int saturation, int brightness);
+        Task SetLighColorAsync(string lightId, int hue, int saturation, int brightness, bool isOn);
 
-        Task GetLightInfoAsync(string lightId);
+        Task<string> GetLightInfoSpecificAsync(string lightId);
 
 
 

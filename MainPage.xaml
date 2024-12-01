@@ -48,11 +48,55 @@
                 IsToggled="{Binding IsLightOn}"
                 HorizontalOptions="Fill" />
             <Button
-                x:Name="BTNGetSpecificLight"
-                Text="Get Specific Light Info"
+                x:Name="BTNTurnLightOnOF"
+                Text="switch licht on or off"
                 Command="{Binding TurnLightOnOffCommand}" 
                 HorizontalOptions="Fill" />
+       
+            <Label Text="Hue (0-65535)"
+                   HorizontalOptions="Center" />
+            <Slider
+                Minimum="0"
+                Maximum="65535"
+                Value="{Binding Hue}"
+                ThumbColor="Blue"
+                HorizontalOptions="Fill" />
 
+            
+            <Label Text="Saturation (0-255)"
+                   HorizontalOptions="Center" />
+            <Slider
+                Minimum="0"
+                Maximum="255"
+                Value="{Binding Saturation}"
+                ThumbColor="Green"
+                HorizontalOptions="Fill" />
+
+           
+            <Label Text="Brightness (0-255)"
+                   HorizontalOptions="Center" />
+            <Slider
+                Minimum="0"
+                Maximum="255"
+                Value="{Binding Brightness}"
+                ThumbColor="Red"
+                HorizontalOptions="Fill" />
+            
+            <Button
+                x:Name="BTNSetLightColor"
+                Text="Set Light Color"
+                Command="{Binding SetLightColorCommand}"
+                HorizontalOptions="Fill" />
+            
+            <Button
+                x:Name="BTNGetSpecificLgihtInfo"
+                Text="Get specific light info"
+                Command="{Binding GetSpecificLightInfoCommand}"
+                HorizontalOptions="Fill"/>
+            
+            <Label x:Name="label for text info lamp temporary"
+                Text="{Binding InfoLamp}"
+                   HorizontalOptions="Fill"/>
         </VerticalStackLayout>
     </ScrollView>
 
