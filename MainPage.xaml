@@ -16,25 +16,40 @@
                 SemanticProperties.Description="dot net bot in a race car number eight" />
 
             <Label
-                Text="Hello, World!"
-                Style="{StaticResource Headline}"
-                SemanticProperties.HeadingLevel="Level1" />
-
-            <Label
-                Text="Welcome to &#10;.NET Multi-platform App UI"
+                Text="Welcome to our HUE app were u can alter lights"
                 Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
+                SemanticProperties.HeadingLevel="Level1"
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
 
-            <Button
-                x:Name="BTNsendApiLink"
-                Text="Send Link" 
-                SemanticProperties.Hint="Sends first link to bridge"
-                Command="{Binding SendApiLinkCommand}"
-                HorizontalOptions="Fill" />
+            <Label
+                Text="Fisrt off chose if u wish to connect to an emulator or to a pysical lamp"
+                Style="{StaticResource SubHeadline}"
+                SemanticProperties.HeadingLevel="Level2"
+                SemanticProperties.Description="start with chosing to what u want to connect" />
+
+            <HorizontalStackLayout
+                Padding="100,0"
+                Spacing="25"
+                >
+               
+                <Button
+                    x:Name="BTNConToEmulater"
+                    Text="Connect to emulator" 
+                    SemanticProperties.Hint="Connect to emulator"
+                    Command="{Binding SendApiLinkCommand}"
+                    HorizontalOptions="Center" />
+
+                <Button
+                    x:Name=" BTNConToBridge"
+                    Text="Connect to HUE lamp"
+                    SemanticProperties.Hint="Connect to HUE lamp"
+                    HorizontalOptions="Center"/>
+                
+            </HorizontalStackLayout>
+            
             <Button
                 x:Name="BTNGetLights"
-                Text="get light info"
+                Text="get lights info"
                 Command="{Binding GetLightsCommand}"
                 HorizontalOptions="Fill"/>
             <Entry
@@ -48,11 +63,50 @@
                 IsToggled="{Binding IsLightOn}"
                 HorizontalOptions="Fill" />
             <Button
-                x:Name="BTNGetSpecificLight"
-                Text="Get Specific Light Info"
+                x:Name="BTNOnOff"
+                Text="turn the chosen lamp On or Off"
                 Command="{Binding TurnLightOnOffCommand}" 
                 HorizontalOptions="Fill" />
-            
+
+            <Label
+                Text="next lets change the color of the lamp u chose above"
+                Style="{StaticResource SubHeadline}"
+                />
+
+            <HorizontalStackLayout
+                Padding="20,0"
+                Spacing="25">
+
+                <Entry
+                    x:Name="HueEntry"
+                    Placeholder="Insert Hue"
+                     Keyboard="Numeric" 
+                    Text="{Binding Hue}"
+                    />
+
+                <Entry
+                    x:Name="SaturationEntry"
+                    Placeholder="Insert Saturation"
+                    Keyboard="Numeric"
+                    Text="{Binding Saturation}"
+                    />
+
+                <Entry
+                    x:Name="BrightnessEntry"
+                    Placeholder="Insert Brightness"
+                    Keyboard="Numeric"
+                    Text="{Binding Brightness}"
+                    />
+            </HorizontalStackLayout>
+
+            <Button
+                x:Name="BTNChangeColor"
+                Text="Lets change that color"
+                Command="{Binding SetLightColorCommand}"
+                HorizontalOptions="Start"
+                />
+
+
 
         </VerticalStackLayout>
     </ScrollView>

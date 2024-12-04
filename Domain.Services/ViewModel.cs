@@ -1,18 +1,20 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 using TDMDUAPP.Domain.Model;
 using TDMDUAPP.infrastucture;
 
 
 namespace TDMDUAPP.Domain.Services
 {
-    public partial class ViewModel : ObservableObject
+    public partial class ViewModel : ObservableObject, ILampControl
     {
         private IBridgeConnectorHueLights BridgeConnector;
        
         public ViewModel(IPreferences preferences, IBridgeConnectorHueLights bridgeConnectorHueLights) 
-        { 
-            bridgeConnectorHueLights = new BridgeConnector(preferences);
+        {
+            BridgeConnector = bridgeConnectorHueLights;
+            //bridgeConnectorHueLights = new BridgeConnector(preferences);
         }
         [ObservableProperty]
         private string _lightId;
@@ -26,6 +28,7 @@ namespace TDMDUAPP.Domain.Services
         private int _brightness;
         [ObservableProperty]
         private string _infoLamp;
+        private ObservableCollection<Lamp> _lamps = new();
         [RelayCommand]
         public async Task SendApiLink() {
             await BridgeConnector.SendApiLinkAsync();
@@ -53,6 +56,12 @@ namespace TDMDUAPP.Domain.Services
         {
             var lightInfo = await BridgeConnector.GetLightInfoSpecificAsync(LightId);
             InfoLamp = lightInfo ?? "No info available";
+        }
+
+        public async Task AddLamp(Lamp lamp)
+        {
+            if (_lamps.Contains(lamp)) { return; };
+            _lamps.Add(lamp);
         }
     }
 }
