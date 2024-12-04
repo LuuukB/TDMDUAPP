@@ -52,6 +52,7 @@
                 Text="Get Specific Light Info"
                 Command="{Binding TurnLightOnOffCommand}" 
                 HorizontalOptions="Fill" />
+            
 
         </VerticalStackLayout>
     </ScrollView>

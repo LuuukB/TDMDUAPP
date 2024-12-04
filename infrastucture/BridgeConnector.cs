@@ -83,14 +83,34 @@ namespace TDMDUAPP.infrastucture
             Debug.WriteLine(json);
         }
 
-        public Task SetLighColorAsync(string lightId, int hue, int saturation, int brightness)
+        public async Task SetLighColorAsync(string lightId, int hueOrigen, int saturation, int brightness, bool isOn)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PutAsJsonAsync(
+              $"{_preferences.Get("username", string.Empty)}/lights/{lightId}/state",
+              new
+              {
+                  on = isOn,
+                  sat = saturation,
+                  bri = brightness,
+                  hue = hueOrigen,
+
+              }
+              );
+            response.EnsureSuccessStatusCode();
+            string json = await response.Content.ReadAsStringAsync();
+            Debug.WriteLine(json);
         }
 
-        public Task GetLightInfoAsync(string lightId)
+        public async Task<string> GetLightInfoSpecificAsync(string lightId)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.GetAsync(
+              $"{_preferences.Get("username", string.Empty)}/lights/{lightId}");
+
+            response.EnsureSuccessStatusCode();
+            string json = await response.Content.ReadAsStringAsync();
+            Debug.WriteLine(json);
+            return json;
+
         }
     }
 }
