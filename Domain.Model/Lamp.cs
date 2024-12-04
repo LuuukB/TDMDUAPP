@@ -13,10 +13,6 @@ namespace TDMDUAPP.Domain.Model
         public bool IsOn { get; set; }
         public int Brightness { get; set; }
         public string? Color { get; set; }
-
-       
-
-
        
     }
 }

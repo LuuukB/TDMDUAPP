@@ -50,7 +50,6 @@ namespace TDMDUAPP.infrastucture
             var successElement = rootObject.GetProperty("success");
             var usernameProperty = successElement.GetProperty("username");
             var userName = usernameProperty.GetString();
-            //UserName = usernameProperty.GetString();
             Debug.WriteLine(userName);
             _preferences.Set("username",userName);
         }
