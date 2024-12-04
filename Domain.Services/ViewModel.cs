@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TDMDUAPP.Domain.Model;
 using TDMDUAPP.infrastucture;
 
 
@@ -7,11 +8,11 @@ namespace TDMDUAPP.Domain.Services
 {
     public partial class ViewModel : ObservableObject
     {
-        private BridgeConnector BridgeConnector;
+        private IBridgeConnectorHueLights BridgeConnector;
        
-        public ViewModel(IPreferences preferences) 
+        public ViewModel(IPreferences preferences, IBridgeConnectorHueLights bridgeConnectorHueLights) 
         { 
-            BridgeConnector = new BridgeConnector(preferences);
+            bridgeConnectorHueLights = new BridgeConnector(preferences);
         }
         [ObservableProperty]
         private string _lightId;

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using TDMDUAPP.Domain.Model;
 using TDMDUAPP.Domain.Services;
+using TDMDUAPP.infrastucture;
 
 
 namespace TDMDUAPP
@@ -25,6 +27,7 @@ namespace TDMDUAPP
             builder.Services.AddSingleton<MainPage>();
 
             builder.Services.AddSingleton<IPreferences>(p => Preferences.Default);
+            builder.Services.AddSingleton<IBridgeConnectorHueLights, BridgeConnector>();
 
             return builder.Build();
         }
