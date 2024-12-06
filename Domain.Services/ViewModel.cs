@@ -2,13 +2,15 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Text.Json;
 using TDMDUAPP.Domain.Model;
 using TDMDUAPP.infrastucture;
 
 
 namespace TDMDUAPP.Domain.Services
 {
-    public partial class ViewModel : ObservableObject, ILampControl
+    public partial class ViewModel : ObservableObject
     {
         private IBridgeConnectorHueLights BridgeConnector;
        
@@ -46,15 +48,30 @@ namespace TDMDUAPP.Domain.Services
         }
         [RelayCommand]
         public async Task GetLights() {
-            //await BridgeConnector.GetAllLightIDsAsync();
-            Lamps.Add(new Lamp()
+            var resuld = await BridgeConnector.GetAllLightIDsAsync();
+            Debug.WriteLine("in lghts");
+            JsonDocument jsondoc = JsonDocument.Parse(resuld);
+            var root = jsondoc.RootElement;
+            Debug.WriteLine("voor array");
+            Debug.WriteLine("geparsed");
+
+            foreach (var lampElement in root.EnumerateObject())
             {
-                LampId = 1,
-                Saturation = 20,
-                IsOn = true,
-                Brightness = 50,
-                Hue = 3000
-            });
+                Debug.WriteLine("in ");
+                var name = lampElement.Name;
+                Debug.WriteLine($"{name}");
+                var info = lampElement.Value;
+                var baseProperty = info.GetProperty("state");
+                var LampId = int.Parse(name);
+                var Saturation = baseProperty.GetProperty("sat").GetInt32();
+                var IsOn = baseProperty.GetProperty("on").GetBoolean();
+                var Brightness = baseProperty.GetProperty("bri").GetInt32();
+                var Hue = baseProperty.GetProperty("hue").GetInt32();
+                var lamp = new Lamp(LampId, IsOn, Brightness, Saturation, Hue);
+                Debug.WriteLine("Lampieess");
+                Lamps.Add(lamp);
+            }
+            
         }
         [RelayCommand]
         public async Task TurnLightOnOffAsync() {
@@ -80,10 +97,5 @@ namespace TDMDUAPP.Domain.Services
             InfoLamp = lightInfo ?? "No info available";
         }
 
-        public async Task AddLamp(Lamp lamp)
-        {
-            if (lamps.Contains(lamp)) { return; };
-            lamps.Add(lamp);
-        }
     }
 }

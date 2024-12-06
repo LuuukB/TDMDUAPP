@@ -18,7 +18,6 @@ namespace TDMDUAPP.infrastucture
         public BridgeConnector(IPreferences preferences)
         {
             _preferences = preferences;
-            //_lampFabric = lampFabric;
         }
 
         public async Task SendApiLinkAsync() 
@@ -58,14 +57,15 @@ namespace TDMDUAPP.infrastucture
         }
 
 
-        public async Task GetAllLightIDsAsync()
+        public async Task<string> GetAllLightIDsAsync()
         {
             Debug.WriteLine("GETTING LIGHTSSS");
             var response = await _httpClient.GetAsync($"{_preferences.Get("username", string.Empty)}/lights");
             response.EnsureSuccessStatusCode();
 
             string json = await response.Content.ReadAsStringAsync();
-            //await _lampFabric.CreateLamps(json);
+            Debug.WriteLine("niks aan de hand");
+            return json;
 
         }
 

@@ -28,8 +28,7 @@ namespace TDMDUAPP
 
             builder.Services.AddSingleton<IPreferences>(p => Preferences.Default);
             builder.Services.AddSingleton<IBridgeConnectorHueLights, BridgeConnector>();
-            builder.Services.AddSingleton<ILampControl, ViewModel>();
-            builder.Services.AddTransient<CreateLampFabric>();
+            
 
             return builder.Build();
         }
