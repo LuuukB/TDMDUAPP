@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using TDMDUAPP.Domain.Model;
 using TDMDUAPP.infrastucture;
 
@@ -28,14 +29,17 @@ namespace TDMDUAPP.Domain.Services
         private int _brightness;
         [ObservableProperty]
         private string _infoLamp;
-        public ObservableCollection<Lamp> lamps = new();
+        public ObservableCollection<Lamp> Lamps { get; } = new();
         [RelayCommand]
         public async Task SendApiLink() {
             await BridgeConnector.SendApiLinkAsync();
         }
         [RelayCommand]
         public async Task GetLights() {
-            await BridgeConnector.GetAllLightIDsAsync();
+            //await BridgeConnector.GetAllLightIDsAsync();
+            Lamps.Add(new(1, true, 20, 20, 20));
+            Lamps.Add(new(2, true, 100, 50, 10));
+           
         }
         [RelayCommand]
         public async Task TurnLightOnOffAsync() {
@@ -60,8 +64,9 @@ namespace TDMDUAPP.Domain.Services
 
         public async Task AddLamp(Lamp lamp)
         {
-            if (lamps.Contains(lamp)) { return; };
-            lamps.Add(lamp);
+            if (Lamps.Contains(lamp)) { return; };
+            Lamps.Add(lamp);
+            Debug.WriteLine("adding lamp" + lamp);
         }
     }
 }

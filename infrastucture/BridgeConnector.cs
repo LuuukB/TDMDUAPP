@@ -13,10 +13,12 @@ namespace TDMDUAPP.infrastucture
     {
         private static readonly HttpClient _httpClient = new() { BaseAddress = new Uri("http://localhost/api/") };//als je met emulator wil connencten gebruik deze anders https://192.168.1.179/api
         private IPreferences _preferences;
+        private CreateLampFabric _lampfabric;
         //private static string? UserName { get; set; }//todo make set private
-        public BridgeConnector(IPreferences preferences) 
+        public BridgeConnector(IPreferences preferences, CreateLampFabric lampFabric) 
         {
             _preferences = preferences;
+            _lampfabric = lampFabric;
         }
 
         public async Task SendApiLinkAsync() 

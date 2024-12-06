@@ -15,8 +15,13 @@ namespace TDMDUAPP.Domain.Model
         public int Saturation { get; set; }
         public int Hue { get; set; }
 
-        public Lamp()
+        public Lamp(int lampid, bool ison, int brightness, int sat, int hue)
         {
+            LampId = lampid;
+            IsOn = ison;
+            Brightness = brightness;
+            Saturation = sat;
+            Hue = hue;
 
         }
     }
