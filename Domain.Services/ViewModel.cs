@@ -28,7 +28,7 @@ namespace TDMDUAPP.Domain.Services
         private int _brightness;
         [ObservableProperty]
         private string _infoLamp;
-        private ObservableCollection<Lamp> _lamps = new();
+        public ObservableCollection<Lamp> lamps = new();
         [RelayCommand]
         public async Task SendApiLink() {
             await BridgeConnector.SendApiLinkAsync();
@@ -60,8 +60,8 @@ namespace TDMDUAPP.Domain.Services
 
         public async Task AddLamp(Lamp lamp)
         {
-            if (_lamps.Contains(lamp)) { return; };
-            _lamps.Add(lamp);
+            if (lamps.Contains(lamp)) { return; };
+            lamps.Add(lamp);
         }
     }
 }

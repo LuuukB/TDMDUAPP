@@ -9,7 +9,8 @@ namespace TDMDUAPP.Domain.Model
 {
     public class CreateLampFabric
     {
-        private ILampControl lampControl { get; set; }
+        private ILampControl _lampControl;
+        public CreateLampFabric(ILampControl lampControl) { _lampControl = lampControl; }
         public async Task CreateLamps(string json) {
             JsonDocument jsonDoc = JsonDocument.Parse(json);
             var rootArray = jsonDoc.RootElement;
@@ -25,7 +26,7 @@ namespace TDMDUAPP.Domain.Model
                     Brightness = baseProperty.GetProperty("bri").GetInt32(),
                     Hue = baseProperty.GetProperty("hue").GetInt32()
                 };
-                await lampControl.AddLamp(lamp);
+                await _lampControl.AddLamp(lamp);
             }
 
 
