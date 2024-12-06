@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
 using TDMDUAPP.Domain.Model;
 using TDMDUAPP.infrastucture;
@@ -14,10 +15,13 @@ namespace TDMDUAPP.Domain.Services
         public ViewModel(IPreferences preferences, IBridgeConnectorHueLights bridgeConnectorHueLights) 
         {
             BridgeConnector = bridgeConnectorHueLights;
+            lamps = new ObservableCollection<Lamp>();
             //bridgeConnectorHueLights = new BridgeConnector(preferences);
         }
         [ObservableProperty]
-        private string _lightId;
+        private Lamp _selectedLamp;
+        [ObservableProperty]
+        private string _lampId;
         [ObservableProperty]
         private bool _isLightOn;
         [ObservableProperty]
@@ -28,18 +32,33 @@ namespace TDMDUAPP.Domain.Services
         private int _brightness;
         [ObservableProperty]
         private string _infoLamp;
-        public ObservableCollection<Lamp> lamps = new();
+        [ObservableProperty]
+        public ObservableCollection<Lamp> lamps;
+
+        [RelayCommand]
+        public void SetSelectedLamp(Lamp lamp) {
+            SelectedLamp = lamp;
+        }
+
         [RelayCommand]
         public async Task SendApiLink() {
             await BridgeConnector.SendApiLinkAsync();
         }
         [RelayCommand]
         public async Task GetLights() {
-            await BridgeConnector.GetAllLightIDsAsync();
+            //await BridgeConnector.GetAllLightIDsAsync();
+            Lamps.Add(new Lamp()
+            {
+                LampId = 1,
+                Saturation = 20,
+                IsOn = true,
+                Brightness = 50,
+                Hue = 3000
+            });
         }
         [RelayCommand]
         public async Task TurnLightOnOffAsync() {
-            await BridgeConnector.TurnLightOnOffAsync(LightId, IsLightOn);
+            await BridgeConnector.TurnLightOnOffAsync(LampId, IsLightOn);
         }
         [RelayCommand]
         public async Task SetLightColor()
@@ -48,13 +67,16 @@ namespace TDMDUAPP.Domain.Services
             int saturation = Saturation >= 0 && Saturation <= 255 ? Saturation : 0;
             int brightness = Brightness >= 0 && Brightness <= 255 ? Brightness : 0;
 
-            await BridgeConnector.SetLighColorAsync(LightId, hue, saturation, brightness, IsLightOn);
+            if (SelectedLamp == null)
+                return;
+
+            await BridgeConnector.SetLighColorAsync(SelectedLamp.LampId.ToString(), SelectedLamp.Hue, SelectedLamp.Saturation, SelectedLamp.Brightness, SelectedLamp.IsOn);
         }
 
         [RelayCommand]
         public async Task GetSpecificLightInfo()
         {
-            var lightInfo = await BridgeConnector.GetLightInfoSpecificAsync(LightId);
+            var lightInfo = await BridgeConnector.GetLightInfoSpecificAsync(LampId);
             InfoLamp = lightInfo ?? "No info available";
         }
 

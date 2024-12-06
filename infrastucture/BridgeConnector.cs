@@ -13,10 +13,12 @@ namespace TDMDUAPP.infrastucture
     {
         private static readonly HttpClient _httpClient = new() { BaseAddress = new Uri("http://localhost/api/") };//als je met emulator wil connencten gebruik deze anders https://192.168.1.179/api
         private IPreferences _preferences;
+        //private CreateLampFabric _lampFabric; // todo de lampfabric is wat de app.g . debugger fout geeft. oplossing: not found
         //private static string? UserName { get; set; }//todo make set private
-        public BridgeConnector(IPreferences preferences) 
+        public BridgeConnector(IPreferences preferences)
         {
             _preferences = preferences;
+            //_lampFabric = lampFabric;
         }
 
         public async Task SendApiLinkAsync() 
@@ -56,19 +58,14 @@ namespace TDMDUAPP.infrastucture
         }
 
 
-        public async Task<List<string>> GetAllLightIDsAsync()
+        public async Task GetAllLightIDsAsync()
         {
             Debug.WriteLine("GETTING LIGHTSSS");
             var response = await _httpClient.GetAsync($"{_preferences.Get("username", string.Empty)}/lights");
             response.EnsureSuccessStatusCode();
 
             string json = await response.Content.ReadAsStringAsync();
-            var lights = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
-            var lightIds = lights.Keys.ToList();
-            foreach (var lightId in lightIds) { 
-                Debug.WriteLine($"LightIDDDDSSS: {lightId}");
-            }
-            return lightIds;
+            //await _lampFabric.CreateLamps(json);
 
         }
 

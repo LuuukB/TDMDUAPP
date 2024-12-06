@@ -9,123 +9,92 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            <Image
-                Source="dotnet_bot.png"
-                HeightRequest="185"
-                Aspect="AspectFit"
-                SemanticProperties.Description="dot net bot in a race car number eight" />
-
-            <Label
-                Text="Welcome to our HUE app were u can alter lights"
-                Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level1"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
-
-
-            <CollectionView ItemsSource="{Binding lamps}">
+            <!--<CollectionView ItemsSource="{Binding Lamps}" SelectedItem="{Binding SelectedLamp}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame BorderColor="Black" Padding="10" Margin="5">
+                        <Frame BorderColor="Black" Padding="10" Margin="5" >
+                            GestureRecognizers="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ViewModel}}, Path=SetSelectedLampCommand}">
                             <VerticalStackLayout>
-                                <Label Text="{Binding Name}" FontSize="Medium" />
                                 <Label Text="{Binding LampId}" FontSize="Small" />
                                 <Label Text="{Binding Hue}" FontSize="Small" />
                                 <Label Text="{Binding Saturation}" FontSize="Small" />
                                 <Label Text="{Binding Brightness}" FontSize="Small" />
-                                <Switch IsToggled="{Binding IsOn}" HorizontalOptions="Start" />
+                                <Label Text="{Binding IsLightOn}" FontSize="Small" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView> -->
+           
+                                <!-- 
+<StackLayout IsVisible="{Binding SelectedLamp, Converter={StaticResource NullToBooleanConverter}}" Spacing="25">
+                <Label Text="Selected Lamp:" FontSize="Medium" />
+
+                <Label Text="{Binding SelectedLamp.LampId}" FontSize="Small" />
+
+                
+                <Slider Minimum="0" Maximum="65535" Value="{Binding SelectedLamp.Hue}" />
+                <Slider Minimum="0" Maximum="255" Value="{Binding SelectedLamp.Saturation}" />
+                <Slider Minimum="0" Maximum="255" Value="{Binding SelectedLamp.Brightness}" />
+
+               
+                <Switch IsToggled="{Binding SelectedLamp.IsOn}" />
+
+              
+                <Button Text="Apply Changes" Command="{Binding SetLightColorCommand}" HorizontalOptions="Fill" />
+            </StackLayout>-->
+
+            <CollectionView ItemsSource="{Binding Lamps}" SelectedItem="{Binding SelectedLamp}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="Black" Padding="10" Margin="5">
+                            <VerticalStackLayout>
+                                <!-- Displaying lamp properties -->
+                                <Label Text="{Binding LampId}" FontSize="Small" />
+                                <Label Text="{Binding Hue}" FontSize="Small" />
+                                <Label Text="{Binding Saturation}" FontSize="Small" />
+                                <Label Text="{Binding Brightness}" FontSize="Small" />
+                                <Label Text="{Binding IsLightOn}" FontSize="Small" />
+
+                                <!-- Add interaction for selection (optional) -->
+                                <Button Text="Select Lamp"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:ViewModel}}, Path=SetSelectedLampCommand}"
+                                    CommandParameter="{Binding .}" />
                             </VerticalStackLayout>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Label
-                Text="Fisrt off chose if u wish to connect to an emulator or to a pysical lamp"
-                Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="start with chosing to what u want to connect" />
+            <!-- Display selected lamp's details -->
+            <StackLayout IsVisible="{Binding SelectedLamp}" Spacing="25">
+                <Label Text="Selected Lamp:" FontSize="Medium" />
+                <Label Text="{Binding SelectedLamp.LampId}" FontSize="Small" />
 
-            <HorizontalStackLayout
-                Padding="100,0"
-                Spacing="25"
-                >
-               
-                <Button
-                    x:Name="BTNConToEmulater"
-                    Text="Connect to emulator" 
-                    SemanticProperties.Hint="Connect to emulator"
-                    Command="{Binding SendApiLinkCommand}"
-                    HorizontalOptions="Center" />
+                <!-- Sliders for controlling lamp properties -->
+                <Slider Minimum="0" Maximum="65535" Value="{Binding SelectedLamp.Hue}" />
+                <Slider Minimum="0" Maximum="255" Value="{Binding SelectedLamp.Saturation}" />
+                <Slider Minimum="0" Maximum="255" Value="{Binding SelectedLamp.Brightness}" />
 
-                <Button
-                    x:Name=" BTNConToBridge"
-                    Text="Connect to HUE lamp"
-                    SemanticProperties.Hint="Connect to HUE lamp"
-                    HorizontalOptions="Center"/>
-                
-            </HorizontalStackLayout>
-            
-            <Button
-                x:Name="BTNGetLights"
-                Text="get lights info"
-                Command="{Binding GetLightsCommand}"
-                HorizontalOptions="Fill"/>
-            <Entry
-                x:Name="LightIdEntry"
-                Placeholder="Type Light ID"
-                Keyboard="Numeric" 
-                Text="{Binding LightId}"
-                HorizontalOptions="Fill"/>
-            <Switch
-                x:Name="LightSwitch"
-                IsToggled="{Binding IsLightOn}"
-                HorizontalOptions="Fill" />
-            <Button
-                x:Name="BTNOnOff"
-                Text="turn the chosen lamp On or Off"
-                Command="{Binding TurnLightOnOffCommand}" 
-                HorizontalOptions="Fill" />
+                <!-- Switch for turning the lamp on/off -->
+                <Switch IsToggled="{Binding SelectedLamp.IsOn}" />
 
-            <Label
-                Text="next lets change the color of the lamp u chose above"
-                Style="{StaticResource SubHeadline}"
-                />
+                <!-- Button to apply changes -->
+                <Button Text="Apply Changes" Command="{Binding SetLightColorCommand}" HorizontalOptions="Fill" />
+            </StackLayout>
 
-            <HorizontalStackLayout
-                Padding="20,0"
-                Spacing="25">
 
-                <Entry
-                    x:Name="HueEntry"
-                    Placeholder="Insert Hue"
-                     Keyboard="Numeric" 
-                    Text="{Binding Hue}"
-                    />
+            <Label Text="First off, choose if you wish to connect to an emulator or to a physical lamp"
+                   Style="{StaticResource SubHeadline}" 
+                   SemanticProperties.HeadingLevel="Level2" 
+                   SemanticProperties.Description="Start with choosing what you want to connect to" />
 
-                <Entry
-                    x:Name="SaturationEntry"
-                    Placeholder="Insert Saturation"
-                    Keyboard="Numeric"
-                    Text="{Binding Saturation}"
-                    />
-
-                <Entry
-                    x:Name="BrightnessEntry"
-                    Placeholder="Insert Brightness"
-                    Keyboard="Numeric"
-                    Text="{Binding Brightness}"
-                    />
+            <HorizontalStackLayout Padding="100,0" Spacing="25">
+                <Button x:Name="BTNConToEmulator" Text="Connect to emulator" Command="{Binding SendApiLinkCommand}" HorizontalOptions="Center" />
+                <Button x:Name="BTNConToBridge" Text="Connect to HUE lamp" SemanticProperties.Hint="Connect to HUE lamp" HorizontalOptions="Center" />
             </HorizontalStackLayout>
 
-            <Button
-                x:Name="BTNChangeColor"
-                Text="Lets change that color"
-                Command="{Binding SetLightColorCommand}"
-                HorizontalOptions="Start"
-                />
-
-
-
+            <Button x:Name="BTNGetLights" Text="Get lights info" Command="{Binding GetLightsCommand}" HorizontalOptions="Fill" />
         </VerticalStackLayout>
     </ScrollView>
 
